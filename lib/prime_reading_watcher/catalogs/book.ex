@@ -7,7 +7,7 @@ defmodule PrimeReadingWatcher.Catalogs.Book do
     field :add_date, :date
     field :asin, :string
     field :title, :string
-    field :update_date, :naive_datetime
+    field :update_date, :date
 
     timestamps()
   end
