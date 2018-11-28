@@ -20,7 +20,8 @@ defmodule PrimeReadingWatcherWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", PrimeReadingWatcherWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", PrimeReadingWatcherWeb do
+     pipe_through :api
+     resources "/books", BookController, except: [:new, :edit]
+  end
 end
