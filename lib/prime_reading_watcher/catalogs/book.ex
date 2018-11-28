@@ -16,6 +16,6 @@ defmodule PrimeReadingWatcher.Catalogs.Book do
   def changeset(book, attrs) do
     book
     |> cast(attrs, [:asin, :title, :add_date, :update_date])
-    |> validate_required([:asin, :title, :add_date, :update_date])
+    |> validate_required([:asin, :add_date, :update_date])
   end
 end
