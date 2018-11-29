@@ -40,4 +40,18 @@ defmodule PrimeReadingWatcherWeb.BookController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def import(conn, %{"book" => book_params}) do
+    book = Catalogs.get_book_by_asin!(book_params["asin"])
+
+    case book do
+      nil ->
+        book_params = Map.put(book_params, "add_date", book_params["update_date"])
+        create(conn, %{"book" => book_params})
+      _ ->
+        with {:ok, %Book{} = book} <- Catalogs.update_book(book, book_params) do
+          render(conn, "show.json", book: book)
+        end
+    end
+  end
 end

@@ -101,4 +101,8 @@ defmodule PrimeReadingWatcher.Catalogs do
   def change_book(%Book{} = book) do
     Book.changeset(book, %{})
   end
+
+  def get_book_by_asin!(asin) do
+    Repo.get_by(Book, asin: asin)
+  end
 end
