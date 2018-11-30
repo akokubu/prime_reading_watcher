@@ -105,4 +105,15 @@ defmodule PrimeReadingWatcher.Catalogs do
   def get_book_by_asin!(asin) do
     Repo.get_by(Book, asin: asin)
   end
+
+  def list_books_tltle_is_null do
+    query =
+      from(
+        b in Book,
+        where: is_nil(b.title),
+        select: b.asin
+    )
+
+    Repo.all(query)
+  end
 end
