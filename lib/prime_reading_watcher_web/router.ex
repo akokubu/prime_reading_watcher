@@ -21,7 +21,8 @@ defmodule PrimeReadingWatcherWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api", PrimeReadingWatcherWeb do
-     pipe_through :api
-     resources "/books", BookController, except: [:new, :edit]
+    pipe_through :api
+    resources "/books", BookController, except: [:new, :edit]
+    post "/books/import", BookController, :import
   end
 end
