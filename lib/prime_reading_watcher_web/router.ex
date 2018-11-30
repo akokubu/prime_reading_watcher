@@ -24,5 +24,6 @@ defmodule PrimeReadingWatcherWeb.Router do
     pipe_through :api
     resources "/books", BookController, except: [:new, :edit]
     post "/books/import", BookController, :import
+    post "/books/update_title", BookController, :updateTitle
   end
 end
