@@ -12,10 +12,7 @@ defmodule PrimeReadingWatcherWeb.BookController do
 
   use Timex
 
-  @key "AKIAIWLEHM3R4ASL6ERA"
-  @sec "vJ2nmAH5pPDt7SMfgOdvTAYvv1P8SNyuT9xB6NYG"
   @tag "fuzzynavel0d-22"
-
 
   def index(conn, _params) do
     books = Catalogs.list_books()
@@ -68,7 +65,7 @@ defmodule PrimeReadingWatcherWeb.BookController do
 
   def updateTitle(conn, _params) do
     Catalogs.list_books_tltle_is_null
-    |> Enum.chunk(10)
+    |> Enum.chunk_every(10)
     |> Enum.map fn asins ->
       asins
       |> get_product
@@ -85,8 +82,9 @@ defmodule PrimeReadingWatcherWeb.BookController do
 
   def get_product asins do
     asin = Enum.join asins, ","
-
-    url = "http://ecs.amazonaws.jp/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=#{@key}&AssociateTag=#{@tag}&IdType=ASIN&ItemId=#{asin}&Operation=ItemLookup&ResponseGroup=ItemAttributes%2CItemIds"
+    aws_key = Application.get_env(:prime_reading_watcher, :aws_key)
+IO.inspect aws_key
+    url = "http://ecs.amazonaws.jp/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=#{aws_key[:key]}&AssociateTag=#{@tag}&IdType=ASIN&ItemId=#{asin}&Operation=ItemLookup&ResponseGroup=ItemAttributes%2CItemIds"
 
     signed_url = url |> URI.parse |> timestamp |> sign
     IO.puts signed_url
@@ -113,7 +111,8 @@ defmodule PrimeReadingWatcherWeb.BookController do
     |> Enum.sort
     |> URI.encode_query
 
-    sig = :crypto.hmac(:sha256, @sec, Enum.join(["GET", url.host, url.path, ordered_query], "\n"))
+    aws_key = Application.get_env(:prime_reading_watcher, :aws_key)
+    sig = :crypto.hmac(:sha256, aws_key[:sec], Enum.join(["GET", url.host, url.path, ordered_query], "\n"))
     |> Base.encode64
     |> URI.encode_www_form
 
