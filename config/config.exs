@@ -17,6 +17,10 @@ config :prime_reading_watcher, PrimeReadingWatcherWeb.Endpoint,
   render_errors: [view: PrimeReadingWatcherWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: PrimeReadingWatcher.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :prime_reading_watcher, :aws_key,
+  key: System.get_env("AWS_ACCESS_KEY"),
+  sec: System.get_env("AWS_ACCESS_SECRET")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
